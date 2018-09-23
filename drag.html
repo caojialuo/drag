@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style text="css/text">
+        #box{
+            width: 100px;
+            height: 100px;
+            background: blue;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="box"></div>
+    <script>
+        // class Drag{
+        //     constructor(){
+        //         this.box = document.querySelector("#box");
+        //         this.drag();
+        //         this.inpos();
+        //         this.load();
+        //     }
+        //     load(){
+        //         var that = this;
+        //         window.onstorage = function(ev){
+        //             if(ev.key == 'dragbox'){
+        //                 that.inpos();
+        //             }
+        //         }
+        //     }
+        //     drag(){
+        //         var that = this;
+        //         this.box.onmousedown = function(ev){
+        //             var e = ev || window.event;
+        //             var disX = e.clientX - that.box.offsetLeft;
+        //             var disY = e.clientY - that.box.offsetTop;
+        //             document.onmousemove = function(ev){
+        //                 var e = ev || window.event;
+        //                 that.box.style.left = e.clientX - disX + "px";
+        //                 that.box.style.top  = e.clientY - disY + "px";
+        //                 //种localStorage
+        //                 localStorage.setItem('dragbox',JSON.stringify({left: that.box.offsetLeft,top: that.box.offsetTop}))
+        //             }
+        //             document.onmouseup = function(){
+        //                 document.onmousemove = document.onmouseup = null;
+        //             }
+        //             return false;
+        //         }
+        //     }
+        //     inpos(){
+        //         let target = JSON.parse(localStorage.getItem('dragbox'));
+        //         if(target){
+        //             this.box.style.left = target.left + "px";
+        //             this.box.style.top = target.top + "px";
+        //         }
+        //     }
+        // }
+        // new Drag()
+
+        document.addEventListener('DOMContentLoaded',function(ev){
+            var obox = document.getElementById('box');
+            obox.addEventListener('touchstart',function(ev){
+                console.log("touchstart",ev)
+                var disX = ev.targetTouches[0].clientX - this.offsetLeft;
+                var disY = ev.targetTouches[0].clientY - this.offsetTop;
+
+                document.addEventListener('touchmove',fnMove,false)
+
+                function fnMove(ev){
+                    obox.style.left = ev.targetTouches[0].clientX - disX + "px";
+                    obox.style.top = ev.targetTouches[0].clientY - disY + "px";
+                }
+
+                document.addEventListener('touchend',fnUp,false)
+
+                function fnUp(){
+                    document.removeEventListener('touchend',fnUp);
+                    document.removeEventListener('touchmove',fnMove);
+                }
+            },false)
+        },false)
+    </script>
+</body>
+</html>
